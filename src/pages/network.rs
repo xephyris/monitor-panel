@@ -107,6 +107,17 @@ impl NetworkPage {
         let short_status_icon = if online {"^"} else {"-"};
         (format!("[{}] SSID: {:20} | {} | Signal: {} dBm", status_icon, ssid, if online { "Online" } else { "Offline" }, bars), format!("{}: {} {}", ssid, short_status_icon, signal), (ssid, signal, online))
     }
+
+    
+    fn auto_restart(&self) {
+        loop {
+            if NetworkPage::get_network_status().2.2 == false {
+                if let Ok(service) = Command::new("systemctl").arg("restart").arg("NetworkManager").output() {
+                    println!("Offline detected restarting Network Manager");
+                }
+            }
+        }
+    }
 }
 
 impl Page for NetworkPage {
@@ -161,6 +172,7 @@ impl Page for NetworkPage {
         
     }
 }
+
 
 #[repr(u32)]
 enum NetworkIcons {
