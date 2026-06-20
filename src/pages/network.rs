@@ -16,7 +16,7 @@ pub struct NetworkPage {
     network: String,
     signal: i32,
     online: bool,
-
+    auto_restart: bool,
 }
 
 impl NetworkPage {
@@ -27,7 +27,8 @@ impl NetworkPage {
                 addresses: Vec::new(), 
                 network: String::new(), 
                 signal: 0, 
-                online: false 
+                online: false,
+                auto_restart: false,
         };
         page.update();
         page
@@ -110,11 +111,9 @@ impl NetworkPage {
 
     
     fn auto_restart(&self) {
-        loop {
-            if NetworkPage::get_network_status().2.2 == false {
-                if let Ok(service) = Command::new("systemctl").arg("restart").arg("NetworkManager").output() {
-                    println!("Offline detected restarting Network Manager");
-                }
+        if NetworkPage::get_network_status().2.2 == false {
+            if let Ok(service) = Command::new("systemctl").arg("restart").arg("NetworkManager").output() {
+                println!("Offline detected restarting Network Manager");
             }
         }
     }
@@ -169,6 +168,10 @@ impl Page for NetworkPage {
         self.network = network;
         self.signal = signal;
         self.online = online;
+
+        if self.auto_restart {
+            self.auto_restart();
+        }
         
     }
 }
