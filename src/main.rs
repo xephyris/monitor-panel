@@ -59,7 +59,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut is_inverted = false;
     let mut last_invert = Instant::now();
     
-    let mut pages: Vec<Box<dyn Page>>= vec![Box::new(NetworkPage::new()), Box::new(UsagePage::new())];
+    let mut pages: Vec<Box<dyn Page>>= vec![Box::new(NetworkPage::new(vec![true])), Box::new(UsagePage::new())];
     let mut current_page: usize = 0;
     let mut main_menus = true;
 

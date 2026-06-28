@@ -20,7 +20,7 @@ pub struct NetworkPage {
 }
 
 impl NetworkPage {
-    pub fn new() -> Self {
+    pub fn new(config: Vec<bool>) -> Self {
         let mut page = 
             NetworkPage { 
                 interfaces: Vec::new(), 
@@ -28,7 +28,7 @@ impl NetworkPage {
                 network: String::new(), 
                 signal: 0, 
                 online: false,
-                auto_restart: false,
+                auto_restart: config[0],
         };
         page.update();
         page
